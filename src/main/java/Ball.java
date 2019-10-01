@@ -8,7 +8,7 @@
 import bagel.Window;
 import bagel.util.Point;
 import bagel.util.Vector2;
-//dscnudjsnc
+
 public class Ball extends Sprite {
     private Vector2 velocity;
     private static final double GRAVITY = 0.15;

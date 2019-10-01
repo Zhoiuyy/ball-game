@@ -13,10 +13,12 @@ import bagel.util.Vector2;
 public abstract class Sprite {
     private Image image;
     private Rectangle rect;
+    private boolean exist;
 
     public Sprite(Point point, String imageSrc) {
         image = new Image(imageSrc);
         rect = image.getBoundingBoxAt(point);
+        exist = true;
     }
 
     public Rectangle getRect() {
@@ -31,9 +33,17 @@ public abstract class Sprite {
         rect.moveTo(rect.topLeft().asVector().add(dx).asPoint());
     }
 
-    public void draw() {
-        image.draw(rect.centre().x, rect.centre().y);
+
+
+    public void destroy(){
+        this.exist = false;
     }
 
+    public void draw() {
+        if(this.exist = true) {
+            image.draw(rect.centre().x, rect.centre().y);
+        }
+    }
     public abstract void update();
+
 }

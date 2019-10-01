@@ -8,12 +8,14 @@
 import bagel.util.Point;
 
 public class Peg extends Sprite {
-    public Peg(Point point) {
-        super(point, "res/peg.png");
+    public Peg(Point point, String imageSrc) {
+        super(point, "res/" + imageSrc + ".png");
     }
 
     @Override
     public void update() {
         super.draw();
     }
+
+
 }

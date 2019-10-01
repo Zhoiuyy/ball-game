@@ -7,26 +7,35 @@
 
 import bagel.*;
 import bagel.util.Point;
-
 import java.util.Random;
 
 public class ShadowBounce extends AbstractGame {
-    private Peg[] pegs = new Peg[50];
-    private Ball ball;
-    private static final Point BALL_POSITION = new Point(512, 32);
+    private  Board[] boards = new Board[5];
+    //private Peg[] pegs = new Peg[50];
+    //private Ball ball;
+    //private static final Point BALL_POSITION = new Point(512, 32);
     private static final double PEG_OFFSET = 100;
 
     public ShadowBounce() {
+        for (int i = 0; i < 5; i++){
+            boards[0] = new Board("res/0.csv");
+        }
+
+        /*
         Random rand = new Random();
         for (int i = 0; i < pegs.length; ++i) {
             Point p = new Point(Window.getWidth() * rand.nextDouble(),
                              PEG_OFFSET + (Window.getHeight() - PEG_OFFSET) * rand.nextDouble());
             pegs[i] = new Peg(p);
         }
+
+         */
     }
 
     @Override
     protected void update(Input input) {
+        boards[0].update(input);
+        /*
         // Check all non-deleted pegs for intersection with the ball
         for (int i = 0; i < pegs.length; ++i) {
             if (pegs[i] != null) {
@@ -51,6 +60,8 @@ public class ShadowBounce extends AbstractGame {
                 ball = null;
             }
         }
+
+         */
     }
 
     public static void main(String[] args) {
