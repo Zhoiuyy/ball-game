@@ -39,8 +39,15 @@ public abstract class Sprite {
         this.exist = false;
     }
 
+    public void destroy(boolean exist){
+        this.exist = exist;
+    }
+    public boolean getExist(){
+        return exist;
+    }
+
     public void draw() {
-        if(this.exist = true) {
+        if(exist) {
             image.draw(rect.centre().x, rect.centre().y);
         }
     }

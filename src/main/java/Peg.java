@@ -8,13 +8,24 @@
 import bagel.util.Point;
 
 public class Peg extends Sprite {
+    private String shape = "normal";
+
     public Peg(Point point, String imageSrc) {
         super(point, "res/" + imageSrc + ".png");
+        if(imageSrc.contains("v")){
+            shape = "vertical";
+        }else if(imageSrc.contains("h")){
+            shape = "horizontal";
+        }
+    }
+
+    public String getShape(){
+        return shape;
     }
 
     @Override
     public void update() {
-        super.draw();
+            super.draw();
     }
 
 

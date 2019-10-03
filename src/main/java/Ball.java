@@ -8,6 +8,9 @@
 import bagel.Window;
 import bagel.util.Point;
 import bagel.util.Vector2;
+import bagel.util.Side;
+import bagel.util.Rectangle;
+
 
 public class Ball extends Sprite {
     private Vector2 velocity;
@@ -33,5 +36,15 @@ public class Ball extends Sprite {
         }
 
         super.draw();
+    }
+
+    public void bounce(Peg peg){
+        Side side = peg.getRect().intersectedAt(peg.getRect().centre(),velocity);
+        if(side == Side.TOP || side == Side.BOTTOM){
+            this.velocity = new Vector2(velocity.x, -velocity.y);
+        }
+        if(side == Side.LEFT || side == Side.RIGHT){
+            this.velocity = new Vector2(-velocity.x, velocity.y);
+        }
     }
 }
