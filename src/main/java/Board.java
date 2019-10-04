@@ -9,6 +9,7 @@ import java.math.*;
 public class Board {
     private ArrayList<Peg> pegs = new ArrayList<Peg>();
     private Ball ball;
+    private int redPegNumber;
     private int shots;
     //private static final Point BALL_POSITION = new Point(512, 32);
     private static final Point BALL_POSITION = new Point(Window.getWidth()/2, 32);
@@ -16,23 +17,28 @@ public class Board {
 
     public Board(String file){
        readCsv(file);
-
        Random rand = new Random();
        int size = pegs.size();
-       for(int i = 0; i < size; ++i){
-           int index = rand.nextInt(size-1);
+       redPegNumber =  Math.round(size/5);
+       for(int i = 0; i <  redPegNumber; ++i){
+           int index = rand.nextInt(size);
+           if(pegs.get(index).getClass() != Peg.class){
+               i--;
+               continue;
+           }
+           Point p = pegs.get(index).getRect().centre();
            String shape =  pegs.get(index).getShape();
            pegs.remove(index);
            if(shape == "normal") {
-               pegs.add(index, new RedPeg(pegs.get(index).getRect().centre()));
+               pegs.add(index, new RedPeg(p));
            }else{
-               pegs.add(index, new RedPeg(pegs.get(index).getRect().centre(), "red-" + shape + "-peg"));
-
+               pegs.add(index, new RedPeg(p, "red-" + shape + "-peg"));
            }
-
-
        }
+    }
 
+    public int getRedPegNumber(){
+        return redPegNumber;
     }
 
     public void readCsv(String file){
@@ -60,6 +66,15 @@ public class Board {
             if (pegs.get(i).getExist()) {
                 if (ball != null && ball.intersects(pegs.get(i))) {
                     pegs.get(i).destroy();
+                    if(pegs.get(i).getClass() == RedPeg.class){
+                        redPegNumber--;
+                    }
+                    /*
+                    if(pegs.get(i).getColour() == "red"){
+                        redPegNumber --;
+                    }
+
+                     */
                     ball.bounce(pegs.get(i));
                 } else {
                     pegs.get(i).update();
