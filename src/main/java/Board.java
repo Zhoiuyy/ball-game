@@ -101,7 +101,6 @@ public class Board {
             }else{
                 pegs.set(index, new RedPeg(p, "red-" + shape + "-peg"));
             }
-
              */
             setShots();
             ball = new Ball(BALL_POSITION, input.directionToMouse(BALL_POSITION));
