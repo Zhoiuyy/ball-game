@@ -7,62 +7,45 @@
 
 import bagel.*;
 import bagel.util.Point;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class ShadowBounce extends AbstractGame {
-    private  Board[] boards = new Board[5];
+    //private  Board[] boards = new Board[2];
+    private  ArrayList<Board> boards = new ArrayList<Board>();
+    //private int shots;
+
     //private Peg[] pegs = new Peg[50];
     //private Ball ball;
     //private static final Point BALL_POSITION = new Point(512, 32);
-    private static final double PEG_OFFSET = 100;
+    //private static final double PEG_OFFSET = 100;
 
     public ShadowBounce() {
-        for (int i = 0; i < 5; i++){
-            boards[0] = new Board("res/0.csv");
+        for (int i = 0; i < 2; i++) {
+            boards.add(new Board("res/" + i + ".csv"));
         }
-
-        /*
-        Random rand = new Random();
-        for (int i = 0; i < pegs.length; ++i) {
-            Point p = new Point(Window.getWidth() * rand.nextDouble(),
-                             PEG_OFFSET + (Window.getHeight() - PEG_OFFSET) * rand.nextDouble());
-            pegs[i] = new Peg(p);
-        }
-
-         */
+        boards.get(0).setShots(20);
     }
+
 
     @Override
     protected void update(Input input) {
-        boards[0].update(input);
-        /*
-        // Check all non-deleted pegs for intersection with the ball
-        for (int i = 0; i < pegs.length; ++i) {
-            if (pegs[i] != null) {
-                if (ball != null && ball.intersects(pegs[i])) {
-                    pegs[i] = null;
-                } else {
-                    pegs[i].update();
-                }
+
+
+        if(boards.size()>0) {
+            boards.get(0).update(input);
+            if(boards.get(0).getRedPegNumber() == 0){
+                boards.remove(0);
             }
         }
-
-        // If we don't have a ball and the mouse button was clicked, create one
-        if (input.wasPressed(MouseButtons.LEFT) && ball == null) {
-            ball = new Ball(BALL_POSITION, input.directionToMouse(BALL_POSITION));
+        if(boards.size()==0 || boards.get(0).getShots() == -1){
+            Window.close();
         }
 
-        if (ball != null) {
-            ball.update();
-
-            // Delete the ball when it leaves the screen
-            if (ball.outOfScreen()) {
-                ball = null;
-            }
-        }
-
-         */
     }
+
+
 
     public static void main(String[] args) {
         new ShadowBounce().run();

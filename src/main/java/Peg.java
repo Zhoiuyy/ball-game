@@ -8,20 +8,28 @@
 import bagel.util.Point;
 
 public class Peg extends Sprite {
-    private String shape = "normal";
+    private String shape ;
+    //private String colour;
 
     public Peg(Point point, String imageSrc) {
         super(point, "res/" + imageSrc + ".png");
-        if(imageSrc.contains("v")){
-            shape = "vertical";
-        }else if(imageSrc.contains("h")){
-            shape = "horizontal";
-        }
+        shape = imageSrc.contains("v") ? "vertical" : ((imageSrc.contains("h")) ? "horizontal" : "normal");
+        //colour = "blue";
     }
 
     public String getShape(){
         return shape;
     }
+/*
+    public String getColour(){
+        return colour;
+    }
+
+    public void setColour(String colour){
+        this.colour = colour;
+    }
+
+ */
 
     @Override
     public void update() {

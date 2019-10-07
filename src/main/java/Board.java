@@ -10,7 +10,7 @@ public class Board {
     private ArrayList<Peg> pegs = new ArrayList<Peg>();
     private Ball ball;
     private int redPegNumber;
-    private int shots;
+    public static int shots;
     //private static final Point BALL_POSITION = new Point(512, 32);
     private static final Point BALL_POSITION = new Point(Window.getWidth()/2, 32);
     private static final Point BUCKET_POSITION = new Point(Window.getWidth()/2, Window.getHeight()-24);
@@ -28,17 +28,25 @@ public class Board {
            }
            Point p = pegs.get(index).getRect().centre();
            String shape =  pegs.get(index).getShape();
-           pegs.remove(index);
-           if(shape == "normal") {
-               pegs.add(index, new RedPeg(p));
+           if(shape.equals("normal")) {
+               pegs.set(index, new RedPeg(p));
            }else{
-               pegs.add(index, new RedPeg(p, "red-" + shape + "-peg"));
+               pegs.set(index, new RedPeg(p, "red-" + shape + "-peg"));
            }
        }
     }
 
     public int getRedPegNumber(){
         return redPegNumber;
+    }
+    public void setShots(int shots){
+        Board.shots = shots;
+    }
+    public void setShots(){
+        Board.shots--;
+    }
+    public int getShots(){
+        return shots;
     }
 
     public void readCsv(String file){
@@ -67,14 +75,8 @@ public class Board {
                 if (ball != null && ball.intersects(pegs.get(i))) {
                     pegs.get(i).destroy();
                     if(pegs.get(i).getClass() == RedPeg.class){
-                        redPegNumber--;
-                    }
-                    /*
-                    if(pegs.get(i).getColour() == "red"){
                         redPegNumber --;
                     }
-
-                     */
                     ball.bounce(pegs.get(i));
                 } else {
                     pegs.get(i).update();
@@ -84,12 +86,29 @@ public class Board {
 
         // If we don't have a ball and the mouse button was clicked, create one
         if (input.wasPressed(MouseButtons.LEFT) && ball == null) {
+            /*
+            Random rand = new Random();
+            int size = pegs.size();
+            int index = rand.nextInt(size);
+            if(pegs.get(index).getClass() != Peg.class){
+                i--;
+                continue;
+            }
+            Point p = pegs.get(index).getRect().centre();
+            String shape =  pegs.get(index).getShape();
+            if(shape.equals("normal")) {
+                pegs.set(index, new RedPeg(p));
+            }else{
+                pegs.set(index, new RedPeg(p, "red-" + shape + "-peg"));
+            }
+
+             */
+            setShots();
             ball = new Ball(BALL_POSITION, input.directionToMouse(BALL_POSITION));
         }
 
         if (ball != null) {
             ball.update();
-
             // Delete the ball when it leaves the screen
             if (ball.outOfScreen()) {
                 ball = null;
