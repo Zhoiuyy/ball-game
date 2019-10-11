@@ -22,10 +22,10 @@ public class ShadowBounce extends AbstractGame {
     //private static final double PEG_OFFSET = 100;
 
     public ShadowBounce() {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 5; i++) {
             boards.add(new Board("res/" + i + ".csv"));
         }
-        boards.get(0).setShots(20);
+        boards.get(0).setShots(100);
     }
 
 
@@ -39,7 +39,7 @@ public class ShadowBounce extends AbstractGame {
                 boards.remove(0);
             }
         }
-        if(boards.size()==0 || boards.get(0).getShots() == -1){
+        if(boards.size()==0 || boards.get(0).outOfShots(input)) {
             Window.close();
         }
 

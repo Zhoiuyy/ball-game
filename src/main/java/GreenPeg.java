@@ -8,4 +8,5 @@ public class GreenPeg extends Peg {
         super(point,"green-peg");
     }
 
+
 }

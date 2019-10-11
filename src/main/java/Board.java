@@ -9,52 +9,79 @@ import java.math.*;
 public class Board {
     private ArrayList<Peg> pegs = new ArrayList<Peg>();
     private Ball ball;
-    private int redPegNumber;
-    public static int shots;
-    //private static final Point BALL_POSITION = new Point(512, 32);
-    private static final Point BALL_POSITION = new Point(Window.getWidth()/2, 32);
-    private static final Point BUCKET_POSITION = new Point(Window.getWidth()/2, Window.getHeight()-24);
+    //private ArrayList<Ball> balls = new ArrayList<Ball>();
 
-    public Board(String file){
-       readCsv(file);
-       Random rand = new Random();
-       int size = pegs.size();
-       redPegNumber =  Math.round(size/5);
-       for(int i = 0; i <  redPegNumber; ++i){
-           int index = rand.nextInt(size);
-           if(pegs.get(index).getClass() != Peg.class){
-               i--;
-               continue;
-           }
-           Point p = pegs.get(index).getRect().centre();
-           String shape =  pegs.get(index).getShape();
-           if(shape.equals("normal")) {
-               pegs.set(index, new RedPeg(p));
-           }else{
-               pegs.set(index, new RedPeg(p, "red-" + shape + "-peg"));
-           }
-       }
+    private int redPegNumber;
+    private int greenPegNumber;
+    public static int shots;
+    private static final Point BALL_POSITION = new Point(Window.getWidth() / 2, 32);
+    private static final Point BUCKET_POSITION = new Point(Window.getWidth() / 2, Window.getHeight() - 24);
+
+    public Board(String file) {
+        readCsv(file);
+        greenPegNumber = 0;
+        redPegNumber = Math.round(pegs.size() / 5);
+        for (int i = 0; i < redPegNumber; ++i) {
+            int index = randomBluePeg();
+            pegs.set(index,pegs.get(index).changeColour("red"));
+        }
     }
 
-    public int getRedPegNumber(){
+    public int randomBluePeg() {
+        Random rand = new Random();
+        int size = pegs.size();
+        int index = rand.nextInt(size);
+        while (pegs.get(index).getClass() != Peg.class || pegs.get(index).getExist() == false) {
+            index = rand.nextInt(size);
+        }
+        return index;
+    }
+
+    public int getRedPegNumber() {
         return redPegNumber;
     }
-    public void setShots(int shots){
+
+    public void setShots(int shots) {
         Board.shots = shots;
     }
-    public void setShots(){
-        Board.shots--;
+
+    public boolean outOfShots(Input input) {
+        if (input.wasPressed(MouseButtons.LEFT) && ball == null && shots < 0) {
+            return true;
+        }
+        return false;
     }
-    public int getShots(){
-        return shots;
+
+    public void getGreenPeg() {
+        if (ball == null && greenPegNumber < 1) {
+            int index = randomBluePeg();
+            pegs.set(index,pegs.get(index).changeColour("green"));
+            greenPegNumber = 1;
+        }
     }
+
+    public void greenReturnBlue() {
+        for (int i = 0; i < pegs.size(); ++i) {
+            if(pegs.get(i).getClass().equals(GreenPeg.class)){
+                pegs.set(i,pegs.get(i).changeColour("blue"));
+            }
+        }
+        greenPegNumber = 0;
+    }
+
+
+
+
 
     public void readCsv(String file){
         try (BufferedReader br =
                      new BufferedReader(new FileReader(file))) {
             String text;
             while ((text = br.readLine()) != null) {
-                String[] columns = text.replace("blue_", "").replace("_","-").split(",");
+                String[] columns = text.split(",");
+                String[] image = columns[0].split("_");
+                columns[0] = (image.length == 3) ? (image[0] + "-" + image[2] + "-" + image[1]) : columns[0];
+                columns[0] = columns[0].replace("_","-").replace("blue-", "");
                 Point p = new Point(Double.parseDouble(columns[1]),Double.parseDouble(columns[2]));
                 if(columns[0].contains("grey")){
                     pegs.add(new GreyPeg(p, columns[0]));
@@ -68,14 +95,17 @@ public class Board {
     }
 
     public void update(Input input) {
-
         // Check all non-deleted pegs for intersection with the ball
+        getGreenPeg();
         for (int i = 0; i < pegs.size(); ++i) {
             if (pegs.get(i).getExist()) {
                 if (ball != null && ball.intersects(pegs.get(i))) {
                     pegs.get(i).destroy();
-                    if(pegs.get(i).getClass() == RedPeg.class){
+                    if(pegs.get(i).getClass().equals(RedPeg.class)){
                         redPegNumber --;
+                    }
+                    if(pegs.get(i).getClass().equals(GreenPeg.class)){
+
                     }
                     ball.bounce(pegs.get(i));
                 } else {
@@ -86,31 +116,18 @@ public class Board {
 
         // If we don't have a ball and the mouse button was clicked, create one
         if (input.wasPressed(MouseButtons.LEFT) && ball == null) {
-            /*
-            Random rand = new Random();
-            int size = pegs.size();
-            int index = rand.nextInt(size);
-            if(pegs.get(index).getClass() != Peg.class){
-                i--;
-                continue;
+            if(shots > 0) {
+                ball = new Ball(BALL_POSITION, input.directionToMouse(BALL_POSITION));
             }
-            Point p = pegs.get(index).getRect().centre();
-            String shape =  pegs.get(index).getShape();
-            if(shape.equals("normal")) {
-                pegs.set(index, new RedPeg(p));
-            }else{
-                pegs.set(index, new RedPeg(p, "red-" + shape + "-peg"));
-            }
-             */
-            setShots();
-            ball = new Ball(BALL_POSITION, input.directionToMouse(BALL_POSITION));
+            Board.shots--;
         }
 
         if (ball != null) {
             ball.update();
-            // Delete the ball when it leaves the screen
+            // Delete the ball when it leaves the screen , and green peg become blue again
             if (ball.outOfScreen()) {
                 ball = null;
+                greenReturnBlue();
             }
         }
     }
