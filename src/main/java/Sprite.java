@@ -34,6 +34,9 @@ public abstract class Sprite {
     }
 
 
+    public boolean destroyable(){
+        return true;
+    }
 
     public void destroy(){
         this.exist = false;

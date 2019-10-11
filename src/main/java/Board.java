@@ -1,6 +1,8 @@
 
 import bagel.*;
 import bagel.util.Point;
+import bagel.util.Vector2;
+
 import java.util.ArrayList;
 import java.io.*;
 import java.util.Random;
@@ -8,8 +10,8 @@ import java.math.*;
 
 public class Board {
     private ArrayList<Peg> pegs = new ArrayList<Peg>();
-    private Ball ball;
-    //private ArrayList<Ball> balls = new ArrayList<Ball>();
+    //private Ball ball;
+    private ArrayList<Ball> balls = new ArrayList<Ball>();
 
     private int redPegNumber;
     private int greenPegNumber;
@@ -46,14 +48,14 @@ public class Board {
     }
 
     public boolean outOfShots(Input input) {
-        if (input.wasPressed(MouseButtons.LEFT) && ball == null && shots < 0) {
+        if (input.wasPressed(MouseButtons.LEFT) &&  balls.isEmpty() && shots < 0) {
             return true;
         }
         return false;
     }
 
     public void getGreenPeg() {
-        if (ball == null && greenPegNumber < 1) {
+        if ( balls.isEmpty() && greenPegNumber < 1) {
             int index = randomBluePeg();
             pegs.set(index,pegs.get(index).changeColour("green"));
             greenPegNumber = 1;
@@ -62,7 +64,7 @@ public class Board {
 
     public void greenReturnBlue() {
         for (int i = 0; i < pegs.size(); ++i) {
-            if(pegs.get(i).getClass().equals(GreenPeg.class)){
+            if(pegs.get(i).getClass().equals(GreenPeg.class) && pegs.get(i).getExist()){
                 pegs.set(i,pegs.get(i).changeColour("blue"));
             }
         }
@@ -98,35 +100,45 @@ public class Board {
         // Check all non-deleted pegs for intersection with the ball
         getGreenPeg();
         for (int i = 0; i < pegs.size(); ++i) {
-            if (pegs.get(i).getExist()) {
-                if (ball != null && ball.intersects(pegs.get(i))) {
-                    pegs.get(i).destroy();
-                    if(pegs.get(i).getClass().equals(RedPeg.class)){
-                        redPegNumber --;
+            if(balls.isEmpty()){
+                pegs.get(i).update();
+            }else{
+                for(int j = 0; j < balls.size(); ++j) {
+                    if (pegs.get(i).getExist() && balls.get(j).intersects(pegs.get(i))) {
+                        pegs.get(i).destroy();
+                        if (pegs.get(i).getClass().equals(RedPeg.class)) {
+                            redPegNumber--;
+                        }
+                        if (pegs.get(i).getClass().equals(GreenPeg.class)) {
+                            balls.add(new Ball(pegs.get(i).getRect().centre(), Vector2.left.add(Vector2.up)));
+                            balls.add(new Ball(pegs.get(i).getRect().centre(), Vector2.right.add(Vector2.up)));
+                        }
+                        balls.get(j).bounce(pegs.get(i));
+                    } else {
+                        pegs.get(i).update();
                     }
-                    if(pegs.get(i).getClass().equals(GreenPeg.class)){
-
-                    }
-                    ball.bounce(pegs.get(i));
-                } else {
-                    pegs.get(i).update();
                 }
             }
         }
 
         // If we don't have a ball and the mouse button was clicked, create one
-        if (input.wasPressed(MouseButtons.LEFT) && ball == null) {
+        if (input.wasPressed(MouseButtons.LEFT) && balls.isEmpty()) {
             if(shots > 0) {
-                ball = new Ball(BALL_POSITION, input.directionToMouse(BALL_POSITION));
+                //ball = new Ball(BALL_POSITION, input.directionToMouse(BALL_POSITION));
+                balls.add(new Ball(BALL_POSITION, input.directionToMouse(BALL_POSITION)));
             }
             Board.shots--;
         }
 
-        if (ball != null) {
-            ball.update();
+        if (!balls.isEmpty()) {
+            for (int i = 0; i < balls.size(); ++i) {
+                balls.get(i).update();
+                if (balls.get(i).outOfScreen()) {
+                    balls.remove(i);
+                }
+            }
             // Delete the ball when it leaves the screen , and green peg become blue again
-            if (ball.outOfScreen()) {
-                ball = null;
+            if (balls.isEmpty()) {
                 greenReturnBlue();
             }
         }

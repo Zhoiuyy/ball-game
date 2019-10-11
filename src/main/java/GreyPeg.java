@@ -7,7 +7,11 @@ public class GreyPeg extends Peg {
         //super.setColour("grey");
     }
 
-
+    @Override
+    public boolean destroyable(){
+        super.update();
+        return false;
+    }
 
     @Override
     public void destroy() {
