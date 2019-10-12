@@ -12,10 +12,12 @@ public class GreyPeg extends Peg {
         super.update();
         return false;
     }
-
+/*
     @Override
     public void destroy() {
         super.destroy(true);
         super.update();
     }
+
+ */
 }

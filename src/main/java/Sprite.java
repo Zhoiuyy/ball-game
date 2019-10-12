@@ -37,17 +37,23 @@ public abstract class Sprite {
     public boolean destroyable(){
         return true;
     }
-
+    /*
     public void destroy(){
         this.exist = false;
     }
 
+
+
     public void destroy(boolean exist){
         this.exist = exist;
     }
+
+
     public boolean getExist(){
         return exist;
     }
+
+     */
 
     public void draw() {
         if(exist) {

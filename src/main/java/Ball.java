@@ -16,17 +16,7 @@ public class Ball extends Sprite {
     private Vector2 velocity;
     private static final double GRAVITY = 0.15;
     private static final double SPEED = 10;
-    /*
-    public Ball(Point point,String direction){
-        super(point, "res/ball.png");
-        if(direction.equals("left")) {
-            velocity = Vector2.left.add(Vector2.up).mul(1);
-        }else if(direction.equals("right")){
-            velocity = Vector2.right.add(Vector2.up).mul(1);
-        }
-    }
 
-     */
     public Ball(Point point, Vector2 direction) {
         super(point, "res/ball.png");
         velocity = direction.mul(SPEED);
