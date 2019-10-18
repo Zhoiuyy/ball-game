@@ -4,7 +4,6 @@ public class GreyPeg extends Peg {
 
     public GreyPeg(Point point, String imageSrc){
         super(point, imageSrc);
-        //super.setColour("grey");
     }
 
     @Override
@@ -12,12 +11,5 @@ public class GreyPeg extends Peg {
         super.update();
         return false;
     }
-/*
-    @Override
-    public void destroy() {
-        super.destroy(true);
-        super.update();
-    }
 
- */
 }

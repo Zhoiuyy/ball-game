@@ -1,25 +1,15 @@
-/**
- * Sample solution for SWEN20003 Object Oriented Software Development
- * Project 1, Semester 2, 2019
- *
- * @author Eleanor McMurtry
- */
 
 import bagel.util.Point;
 
 public class Peg extends Sprite {
     private String shape ;
-    //private String colour;
 
     public Peg(Point point, String imageSrc) {
         super(point, "res/" + imageSrc + ".png");
         shape = imageSrc.contains("v") ? "vertical" : ((imageSrc.contains("h")) ? "horizontal" : "normal");
     }
 
-    public String getShape(){
-        return shape;
-    }
-
+    // change the colour of the peg
     public Peg changeColour(String colour){
         Point p = super.getRect().centre();
         if(colour.equals("blue")) {
@@ -43,7 +33,6 @@ public class Peg extends Sprite {
         }
         return this;
     }
-
 
     @Override
     public void update() {

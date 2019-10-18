@@ -13,30 +13,37 @@ public class Powerup extends Sprite {
     public Powerup(Point point, Point destination) {
         super(point, "res/powerup.png");
         this.destination = destination;
-        //double m = Math.sqrt(Math.pow(point.x-destination.x,2)+Math.pow(point.y-destination.y,2));
         double m = magnitude(point,destination);
-        this.direction = new Vector2(point.x-destination.x, point.y-destination.y).div(m);
+        this.direction = direction(point,destination,m);
         this.velocity = direction.mul(SPEED);
     }
-    public double magnitude(Point p, Point d){
+
+    private double magnitude(Point p, Point d){
         double m = Math.sqrt(Math.pow(p.x-d.x,2)+Math.pow(p.y-d.y,2));
         return m;
+    }
+
+    private Vector2 direction(Point point, Point destination, double m){
+        double xDiff = destination.x-point.x;
+        double yDiff = destination.y-point.y;
+        Vector2 direction = new Vector2().add(Vector2.right.mul(xDiff)).add(Vector2.down.mul(yDiff)).div(m);
+        return direction;
     }
 
     @Override
     public void update() {
         super.move(velocity);
-        if (magnitude(super.getRect().centre(),destination)<5){
-        //if (super.getRect().left() < 0 || super.getRect().right() > Window.getWidth()){
 
+        if (magnitude(super.getRect().centre(),destination)<5){
             Random rand = new Random();
             destination = new Point(Window.getWidth() * rand.nextDouble(),
                     Window.getHeight()* rand.nextDouble());
             double m = magnitude(super.getRect().centre(),destination);
-            this.direction = new Vector2(super.getRect().centre().x-destination.x, super.getRect().centre().y-destination.y).div(m);
+            this.direction =  direction(super.getRect().centre(),destination,m);
             this.velocity = direction.mul(SPEED);
         }
-        super.draw();
 
+        super.draw();
     }
+
 }

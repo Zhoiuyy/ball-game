@@ -1,15 +1,9 @@
-/**
- * Sample solution for SWEN20003 Object Oriented Software Development
- * Project 1, Semester 2, 2019
- *
- * @author Eleanor McMurtry
- */
+
 
 import bagel.Window;
 import bagel.util.Point;
 import bagel.util.Vector2;
 import bagel.util.Side;
-import bagel.util.Rectangle;
 
 
 public class Ball extends Sprite {
@@ -21,6 +15,11 @@ public class Ball extends Sprite {
         super(point, "res/ball.png");
         velocity = direction.mul(SPEED);
     }
+    public Ball(Ball ball, String imageSrc) {
+        super(ball.getRect().centre(), imageSrc);
+        this.velocity = ball.velocity;
+    }
+
 
     public boolean outOfScreen() {
         return super.getRect().top() > Window.getHeight();
@@ -38,8 +37,11 @@ public class Ball extends Sprite {
         super.draw();
     }
 
+    //check the side of intersection, and change the ball's velocity
     public void bounce(Peg peg){
-        Side side = peg.getRect().intersectedAt(peg.getRect().centre(),velocity);
+        Side side = peg.getRect().intersectedAt(peg.getRect().topLeft(),velocity);
+        //Side side = peg.getRect().intersectedAt(super.getRect().centre(), velocity);
+
         if(side == Side.TOP || side == Side.BOTTOM){
             this.velocity = new Vector2(velocity.x, -velocity.y);
         }
