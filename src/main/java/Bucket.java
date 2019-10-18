@@ -1,3 +1,7 @@
+/**
+ * this class can draw a bucket
+ */
+
 import bagel.Window;
 import bagel.util.Point;
 import bagel.util.Vector2;
@@ -6,17 +10,29 @@ public class Bucket extends Sprite {
     private Vector2 velocity;
     private static final double SPEED = 4;
 
+    /**
+     *
+     * @param point the point to draw the bucket
+     * @param direction the direction the bucket will move to
+     */
     public Bucket(Point point, Vector2 direction) {
         super(point, "res/bucket.png");
         velocity = direction.mul(SPEED);
     }
 
+    /**
+     * make the bucket indestructible
+     * @return false as bucket can not be destroyed
+     */
     @Override
     public boolean destroyable(){
         update();
         return false;
     }
 
+    /**
+     * update the bucket
+     */
     @Override
     public void update() {
         super.move(velocity);

@@ -1,3 +1,6 @@
+/**
+ * this class can instance a shadow bounce game
+ */
 
 import bagel.*;
 import java.util.ArrayList;
@@ -5,6 +8,9 @@ import java.util.ArrayList;
 public class ShadowBounce extends AbstractGame {
     private  ArrayList<Board> boards = new ArrayList<Board>();
 
+    /**
+     * constructer
+     */
     public ShadowBounce() {
         for (int i = 0; i < 5; i++) {
             boards.add(new Board("res/" + i + ".csv"));
@@ -12,7 +18,10 @@ public class ShadowBounce extends AbstractGame {
         boards.get(0).setShots(20);
     }
 
-
+    /**
+     * update the game
+     * @param input
+     */
     @Override
     protected void update(Input input) {
 
@@ -32,6 +41,10 @@ public class ShadowBounce extends AbstractGame {
 
     }
 
+    /**
+     * main function
+     * @param args
+     */
 
     public static void main(String[] args) {
         new ShadowBounce().run();

@@ -1,15 +1,27 @@
+/**
+ * to get a peg
+ */
 
 import bagel.util.Point;
 
 public class Peg extends Sprite {
     private String shape ;
 
+    /**
+     *
+     * @param point the point to draw peg
+     * @param imageSrc the picture
+     */
     public Peg(Point point, String imageSrc) {
         super(point, "res/" + imageSrc + ".png");
         shape = imageSrc.contains("v") ? "vertical" : ((imageSrc.contains("h")) ? "horizontal" : "normal");
     }
 
-    // change the colour of the peg
+    /**
+     * change the colour of the peg
+     * @param colour the colour that peg want change to
+     * @return the peg after changing colour
+     */
     public Peg changeColour(String colour){
         Point p = super.getRect().centre();
         if(colour.equals("blue")) {
@@ -34,6 +46,9 @@ public class Peg extends Sprite {
         return this;
     }
 
+    /**
+     * draw the peg
+     */
     @Override
     public void update() {
             super.draw();

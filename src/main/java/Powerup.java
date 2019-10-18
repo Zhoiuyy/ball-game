@@ -1,3 +1,7 @@
+/**
+ * this class can draw a powerup
+ */
+
 import bagel.Window;
 import bagel.util.Point;
 import bagel.util.Vector2;
@@ -10,6 +14,11 @@ public class Powerup extends Sprite {
     private Vector2 direction;
     private Point destination;
 
+    /**
+     *
+     * @param point the point to draw the powerup
+     * @param destination the destination that the powerup will move to
+     */
     public Powerup(Point point, Point destination) {
         super(point, "res/powerup.png");
         this.destination = destination;
@@ -18,10 +27,13 @@ public class Powerup extends Sprite {
         this.velocity = direction.mul(SPEED);
     }
 
+
+
     private double magnitude(Point p, Point d){
         double m = Math.sqrt(Math.pow(p.x-d.x,2)+Math.pow(p.y-d.y,2));
         return m;
     }
+
 
     private Vector2 direction(Point point, Point destination, double m){
         double xDiff = destination.x-point.x;
@@ -30,6 +42,9 @@ public class Powerup extends Sprite {
         return direction;
     }
 
+    /**
+     * update the powerup
+     */
     @Override
     public void update() {
         super.move(velocity);

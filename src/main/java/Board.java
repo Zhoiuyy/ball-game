@@ -1,4 +1,9 @@
 
+/**
+ * the board include all kinds of sprite
+ * @author Ying Zhou
+ */
+
 import bagel.*;
 import bagel.util.Point;
 import bagel.util.Vector2;
@@ -6,6 +11,8 @@ import bagel.util.Vector2;
 import java.util.ArrayList;
 import java.io.*;
 import java.util.Random;
+
+
 
 public class Board {
     private ArrayList<Peg> pegs = new ArrayList<Peg>();
@@ -17,10 +24,17 @@ public class Board {
     private int redPegNumber;
     private int greenPegNumber;
     private boolean turnInitialized;
-    public static int shots;
     private static final Point BALL_POSITION = new Point(Window.getWidth() / 2, 32);
     private static final Point BUCKET_POSITION = new Point(Window.getWidth() / 2, Window.getHeight() - 24);
+    /**
+     * number of shots
+     */
+    public static int shots;
 
+    /**
+     * initialize a board
+     * @param file the file is going to be read
+     */
     public Board(String file) {
         readCsv(file);
         greenPegNumber = 0;
@@ -35,14 +49,28 @@ public class Board {
     }
 
 
+    /**
+     * get the number of red pegs
+     * @return  the the number of red pegs
+     */
     public int getRedPegNumber() {
         return redPegNumber;
     }
 
+    /**
+     *
+     * set the shot number
+     * @param shots the shot number will be set to this number
+     */
     public void setShots(int shots) {
         Board.shots = shots;
     }
 
+    /**
+     * check if there's shots left
+     * @param input
+     * @return if no more shots left
+     */
     public boolean outOfShots(Input input) {
         if (input.wasPressed(MouseButtons.LEFT) &&  balls.isEmpty() && shots < 0) {
             return true;
@@ -162,6 +190,10 @@ public class Board {
         }
     }
 
+    /**
+     * upadate the board
+     * @param input
+     */
     public void update(Input input) {
         // set a new trun
         if (isNewTurn()) {
